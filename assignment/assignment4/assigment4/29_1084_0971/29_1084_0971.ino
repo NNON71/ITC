@@ -113,7 +113,7 @@ void setup()
   pinMode(button,INPUT);
   digitalWrite(player1, HIGH);
   digitalWrite(player2, HIGH);
-  x = random(0,8);
+  x = random(1,7);
   millis();
   Serial.begin(9600);
   
@@ -122,7 +122,7 @@ void setup()
 void buzz(int x)
 {
     tone(buzzs,x);
-    delay(500);
+    delay(200);
     noTone(buzzs);
 }
 
@@ -157,7 +157,7 @@ void gameover()
         }
        }
     }
-  for(int i=0;i<3;i++)
+  for(int i=0;i<4;i++)
   {
     buzz(tones[i]);
   }
@@ -319,6 +319,7 @@ void player()
    clearmap();
    updateplayer();
   }
+  //P1
   for (int i = 0; i < 8; i++)
   {
       if(lemap[i][1] == 0) 
@@ -331,6 +332,7 @@ void player()
         lc.setLed(0,i,7,HIGH);
       }
   } 
+  //P2
   for (int i = 0; i < 8; i++)
   {
       if(lemap[i][0] == 0) 
@@ -347,10 +349,10 @@ void player()
 
 void testBall()
 {
-  if(millis()-bob>=200)
+  if(millis()-bob>=100)
   {
     clearball();
-    testupdateball();
+    testupdateball();   
   }
 }
 
