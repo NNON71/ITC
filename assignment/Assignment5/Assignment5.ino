@@ -40,24 +40,24 @@ struct State {
 }; // next state for inputs 0,1,2,3
 typedef const struct State SType;
 SType FSM[20] = {
-  {B01001100,2000,{goW, goW, waitW, waitW, waitPWtid1, waitPWtid1, waitPStid1, waitPStid1}},
-  {B01010100,500, {goS, goS, goS, goS, goS, goS, goS, goS}},
-  {B01100001,2000,{goS, waitS, goS, waitS, waitPWtid1, waitPWtid1, waitPStid1, waitPWtid1}},
-  {B01100010,500, {goW, goW, goW, goW, goW, goW, goW, goW}},
-  {B10001001,2000,{GoPW, swapW, swapS, swapW, GoPW, swapW, swapS, swapW}},
+  {B01001100,2000,{goW, goW, waitW, waitW, GoPW, GoPW, GoPW, GoPW}},
+  {B01001010,500, {goS, goS, goS, goS, goS, goS, goS, goS}},
+  {B01100001,2000,{goS, waitS, goS, waitS, GoPS, GoPS, GoPS, GoPS}},
+  {B01010001,500, {goW, goW, goW, goW, goW, goW, goW, goW}},
+  {B10001001,2000,{GoPW, waitPWtid1, waitPStid1, waitPWtid1, GoPW, waitPWtid1, waitPStid1, waitPWtid1}},
   {B00001001,500, {waitPWdab1, waitPWdab1, waitPWdab1, waitPWdab1, waitPWdab1, waitPWdab1, waitPWdab1, waitPWdab1}},
   {B01001001,500, {waitPWtid2, waitPWtid2, waitPWtid2, waitPWtid2, waitPWtid2, waitPWtid2, waitPWtid2, waitPWtid2}},
   {B00001001,500, {waitPWdab2, waitPWdab2, waitPWdab2, waitPWdab2, waitPWdab2, waitPWdab2, waitPWdab2, waitPWdab2}},
   {B01001001,500, {waitPWtid3, waitPWtid3, waitPWtid3, waitPWtid3, waitPWtid3, waitPWtid3, waitPWtid3, waitPWtid3}},
   {B00001001,500, {waitPWdab3, waitPWdab3, waitPWdab3, waitPWdab3, waitPWdab3, waitPWdab3, waitPWdab3, waitPWdab3}},
-  {B01001001,500, {GoPW, GoPW, GoPW, GoPW, GoPW, GoPW, GoPW, GoPW}},
-  {B10001001,2000,{GoPS, swapW, swapS, swapS, waitPWtid1, waitPWtid1, swapS, swapS}},
+  {B01001001,500, {goW, goW, goW, goW, goW, goW, goW, goW}},//GoPW, GoPW, GoPW, GoPW, GoPW, GoPW, GoPW, GoPW
+  {B10001001,2000,{GoPW, waitPWtid1, waitPStid1, waitPWtid1, GoPW, waitPWtid1, waitPStid1, waitPWtid1}},
   {B00001001,500, {waitPSdab1, waitPSdab1, waitPSdab1, waitPSdab1, waitPSdab1, waitPSdab1, waitPSdab1, waitPSdab1}},
   {B01001001,500, {waitPStid2, waitPStid2, waitPStid2, waitPStid2, waitPStid2, waitPStid2, waitPStid2, waitPStid2}},
   {B00001001,500, {waitPSdab2, waitPSdab2, waitPSdab2, waitPSdab2, waitPSdab2, waitPSdab2, waitPSdab2, waitPSdab2}},
   {B01001001,500, {waitPStid3, waitPStid3, waitPStid3, waitPStid3, waitPStid3, waitPStid3, waitPStid3, waitPStid3}},
   {B00001001,500, {waitPSdab3, waitPSdab3, waitPSdab3, waitPSdab3, waitPSdab3, waitPSdab3, waitPSdab3, waitPSdab3}},
-  {B01001001,500, {GoPS, GoPS, GoPS, GoPS, GoPS, GoPS, GoPS, GoPS}},
+  {B01001001,500, {goS, goS, goS, goS, goS, goS, goS, goS}},
   {B01010001,500, {goS, goS, goS, goS, goS, goS, goS, goS}},
   {B01001010,500, {goW, goW, goW, goW, goW, goW, goW, goW}}
 };
