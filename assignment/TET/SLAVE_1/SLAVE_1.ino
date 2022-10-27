@@ -1,8 +1,8 @@
 #include <Wire.h>
 
 
-#define SLAVE_ADDR 2
-#define computer_number 2
+#define SLAVE_ADDR 1
+#define computer_number 1
 
 char text[100];
 char message[100];
@@ -98,16 +98,16 @@ void receiveEvent(int byte)
   }
 
   
-  if(text[8] == computer_number + '0' )      // if this token is sent to me
+  else if(text[8] == computer_number + '0' )      // if this token is sent to me
   {
      //print message via serial monitor
-   Serial.print("********************************************:");
+    //print message via serial monitor
+    Serial.print("********************************************:");
     for(int i = 10; i < sizeof(text); i++)
     {
     Serial.print(text[i]);
     }
     Serial.println();
-
     // CLEAR token to emthy
     text[6] = '0';
     for(int i=8;i<100;i++)
