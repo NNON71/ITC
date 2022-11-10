@@ -8,7 +8,7 @@ Adafruit_SSD1306 OLED(OLED_RESET);
 
 #define edithour_button 9
 #define editmin_button 8
-#define editsec_button 7
+#define save_button 7
 #define select_button 10
 
 #define buzzer_pin 4
@@ -21,6 +21,7 @@ int8_t sec=0,
 int i;
 int8_t SEH,SEM,SES;
 int8_t SAH,SAM,SAS;
+int8_t ALH,ALM,ALS;
 char Mode[4]={'N','E','A','S'};
 bool edit_start=false;
 bool stoptime=false;
@@ -33,25 +34,25 @@ void setup()
   Timer1.initialize(1000000); 
   Timer1.attachInterrupt(uptime);
   analogWrite(buzzer_pin,OUTPUT);
+  analogWrite(select_button,INPUT_PULLUP);
   analogWrite(edithour_button,INPUT_PULLUP);
   analogWrite(editmin_button,INPUT_PULLUP);
-  analogWrite(select_button,INPUT_PULLUP);
-  analogWrite(editsec_button,INPUT_PULLUP);
+  analogWrite(save_button,INPUT_PULLUP);
   OLED.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  if(EEPROM.read(0)<24) EEPROM.get(0,hour);
-  if(EEPROM.read(1)<60) EEPROM.get(1,minute);
-  if(EEPROM.read(2)<60) EEPROM.get(2,sec);
+  EEPROM.get(0,hour);
+  EEPROM.get(1,minute);
+  EEPROM.get(2,sec);
   
-  if(EEPROM.read(3)<24) EEPROM.get(3,SAH);
-  if(EEPROM.read(4)<60) EEPROM.get(4,SAM);
-  if(EEPROM.read(5)<60) EEPROM.get(5,SAS);
+  EEPROM.get(3,ALH);
+  EEPROM.get(4,ALM);
+  EEPROM.get(5,ALS);
   millis();
 }
 
 void rotatescreen()
 {
-  //Serial.println(analogRead(A0));
-  if(analogRead(A0)>290)
+  Serial.println(analogRead(A0));
+  if(analogRead(A0)>370)
   {
     OLED.setRotation(2);
   }
@@ -61,22 +62,6 @@ void rotatescreen()
 void uptime()
 {
   sec++;
-//  if(Mode[i]=='E')
-//  {
-//    if(digitalRead(edithour_button)==1||digitalRead(editmin_button)==1||digitalRead(editsec_button)==1)
-//    {
-//       stoptime=true;
-//       Serial.println("ADW");
-//    }
-//  }
-//  if(Mode[i]!='E')
-//  {
-//    stoptime=false;
-//  }
-//  if(stoptime==false)
-//  {
-//    sec++;
-//  }
   if(sec>59)
   {
     minute+=1;
@@ -90,18 +75,6 @@ void uptime()
   if(hour==24)
   {
     hour=0;
-  }
-}
-
-unsigned long long bounce;
-int Press(int pin)
-{
-  if(!digitalRead(pin))
-  {
-    if(millis()-bounce>=500)
-    {
-      bounce=millis();
-    }
   }
 }
 
@@ -184,27 +157,10 @@ void displayalarm()
 
 void displaysave()
 {
-  OLED.clearDisplay();
-  OLED.setTextColor(WHITE);
-  OLED.setTextSize(2);
-  OLED.setCursor(20,1);
-  if(hour<10)
-  {
-    OLED.print("0");
-  }
-  OLED.print(hour);
-  OLED.print(":");
-  if(minute<10)
-  {
-    OLED.print("0");
-  }
-  OLED.print(minute);
-  OLED.print(":");
-  if(sec<10)
-  {
-    OLED.print("0");
-  }
-  OLED.print(sec);
+    OLED.clearDisplay();
+    OLED.setTextSize(2);
+    OLED.setCursor(30,2);
+    OLED.print("SAVE");
 }
 
 void loop()
@@ -228,21 +184,24 @@ void loop()
       }
       else if(Mode[i]=='A')
       {
-        SAH=0;
-        SAM=0;
-        SAS=0;
+        SAH=SEH;
+        SAM=SEM;
+        SAS=SES;
       }
       else if(Mode[i]=='S')
       {
         hour=SEH;
         minute=SEM;
         sec=SES;
+        ALH=SAH;
+        ALM=SAM;
+        ALS=SAS;
         EEPROM.update(0,hour);
         EEPROM.update(1,minute);
         EEPROM.update(2,sec);
-        EEPROM.update(3,SAH);
-        EEPROM.update(4,SAM);
-        EEPROM.update(5,SAS);
+        EEPROM.update(3,ALH);
+        EEPROM.update(4,ALM);
+        EEPROM.update(5,ALS);
       }
     }
   }
@@ -326,22 +285,18 @@ void loop()
     OLED.println("Mode : SAVE");
   }
   
-  if(hour==SAH&&minute==SAM&&sec==SAS)
+  if(hour==ALH&&minute==ALM)
   {
-    int al=millis();
     Serial.println("ALARM");
     OLED.clearDisplay();
     OLED.setTextSize(2);
     OLED.setCursor(30,2);
     OLED.println("ALARM");
-    if(millis()-al<1000)
-    {   
-      for(int i=0;i<6;i++)
-      {
-        tone(buzzer_pin,tones[i],20);
-      }
-      noTone(buzzer_pin);
+    for(int i=0;i<6;i++)
+    {
+     tone(buzzer_pin,tones[i],20);
     }
+    noTone(buzzer_pin);
   }
   OLED.display();
 }
